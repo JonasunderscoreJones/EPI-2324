@@ -1,3 +1,5 @@
+author: "7987847, Werner
+
 Rechner zur Berechnung vom harmonischen und arithmetischen Mittel
 ---
 

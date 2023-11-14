@@ -3,16 +3,19 @@ __author__ = "7987847, Werner"
 
 # Aufgabe 2
 # a)
-def sum_range(m:int, n:int) -> int:
+def sum_range(start:int, end:int) -> int:
     '''Summe aller Zahlen von m bis n
     m: Startwert
     n: Endwert
     '''
-    return sum(range(m, n+1))
+    if start > end:
+        start, end = end, start
+    return sum(range(start, end+1))
 
 print("Es wird die Summe aller Zahlen von m bis n berechnet.")
 print("Geben Sie m und n ein.")
 print(sum_range(int(input("m: ")), int(input("n: "))))
+
 
 # Testfälle
 
@@ -26,15 +29,13 @@ print(sum_range(int(input("m: ")), int(input("n: "))))
 
 
 # b)
-def halbiere_bis_null(n:int) -> int:
+def halbiere_bis_null(zahl:int) -> int:
     '''Anzahl der Schritte, bis n <= 1
     n: Zahl, die halbiert werden soll
     '''
-    if n == 0:
-        return 0
     schritte = 0
-    while abs(n) >= 1:
-        n /= 2
+    while zahl != 0:
+        zahl /= 2
         schritte += 1
     return schritte
 
@@ -56,13 +57,13 @@ print(halbiere_bis_null(int(input("n: "))))
 
 # c)
 
-def erzeuge_schachfeld(n:int, m:int):
+def erzeuge_schachfeld(zeilen:int, spalten:int):
     '''Erzeugt ein Schachfeld mit n Zeilen und m Spalten
     n: Anzahl der Zeilen
     m: Anzahl der Spalten
     '''
-    for i in range(n):
-        for j in range(m):
+    for i in range(zeilen):
+        for j in range(spalten):
             # Wenn sowohl die Zeile als auch die Spalte gerade oder ungerade
             # ist, ist es Schwarz (1),
             # ansonsten ist es Weiß (0).
@@ -102,8 +103,8 @@ def catalansche_konstante_approximation(anzahl_terme:int) -> float:
     anzahl_terme: Anzahl der Terme, die zur Approximation verwendet werden sollen
     '''
     catalan_summe = 0.0
-    for n in range(anzahl_terme):
-        term = 1 / ((2 * n + 1) ** 2)
+    for zahl in range(anzahl_terme):
+        term = 1 / ((2 * zahl + 1) ** 2)
         catalan_summe += term
     return catalan_summe
 
@@ -131,11 +132,11 @@ def differenz_zwischen_approximationen(start:int, ende:int, schrittweite:int) ->
     ende: Endwert
     schrittweite: Schrittweite
     '''
-    for n in range(start, ende, schrittweite):
-        erster_wert = catalansche_konstante_approximation(n)
-        zweiter_wert = catalansche_konstante_approximation(n + schrittweite)
+    for zahl in range(start, ende, schrittweite):
+        erster_wert = catalansche_konstante_approximation(zahl)
+        zweiter_wert = catalansche_konstante_approximation(zahl + schrittweite)
         differenz = zweiter_wert - erster_wert
-        print(f"n = {n} : {erster_wert} ; n = {n + schrittweite} : {zweiter_wert}")
+        print(f"n = {zahl} : {erster_wert} ; n = {zahl + schrittweite} : {zweiter_wert}")
         print(f"Differenz: {differenz}\n")
 
 print("Es wird die Differenz zwischen zwei Approximationen der catalanschen Konstante ausgegeben.")

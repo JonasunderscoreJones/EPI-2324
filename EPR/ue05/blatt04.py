@@ -10,9 +10,9 @@ def create_card_list(number_of_cards:int) -> [(int, str)]:
     number_of_cards: Anzahl der Karten
     '''
     card_list = []
-    for i in range(1, int((number_of_cards+1)/4)+1):
+    for i in range(1, int((number_of_cards+1)/3)+1):
         card_list.append((i, "Kreuz"))
-        card_list.append((i, "Pik"))
+        #card_list.append((i, "Pik"))
         card_list.append((i, "Herz"))
         card_list.append((i, "Karo"))
     return card_list
@@ -69,6 +69,20 @@ int) -> [[(int, str)]]:
             list_players[j].append(list_cards.pop(0))
 
     return list_players
+
+
+def hand_out_cards_modified(list_cards: [(int, str)], players: {str: list}, number_of_cards:
+int) -> [[(int, str)]]:
+    '''Teilt die Karten an die Spieler aus
+    list_cards: Liste mit Karten
+    players: Anzahl der Spieler
+    number_of_cards: Anzahl der Karten pro Spieler
+    '''
+    for player in players:
+        for _ in range(number_of_cards):
+            players[player].append(list_cards.pop(0))
+
+    return players
 
 
 def main():

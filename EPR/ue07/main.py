@@ -1,0 +1,166 @@
+'''EPR Übung 7'''
+__author__ = "7987847, Werner"
+
+import random
+
+def gen_matrix(width_height: int) -> list[list[(int, int)]]:
+    '''Generiert eine nxn Matrix mit Zufallszahlen zwischen -9 und 9
+    Args:
+        n (int): Dimension der Matrix
+    Returns:
+        list(list()): nxn Matrix mit Zufallszahlen zwischen -9 und 9
+    '''
+    return [[random.randint(-9, 9) for _ in range(width_height)] for _ in range(width_height)]
+
+
+def greedy_approach(matrix) -> list((int, int)):
+    '''Greedy Ansatz für den Weg durch die Matrix
+
+    Returns:
+        list((int, int)): Liste mit den Koordinaten des Weges
+    '''
+
+    width_height = len(matrix)
+
+    # Testmatrix
+    #matrix = [[4, 0, 8], [-3, -4, -7], [-8, -1, 7]]
+
+    # Startpunkt
+    path_list = [(0, 0)]
+    index = (0, 0)
+
+    cost = matrix[0][0]
+
+    # Solange der Endpunkt nicht erreicht ist
+    while index != (width_height-1, width_height-1):
+        # Aktuelle Position
+        index_x, index_y = index
+
+        best_next_index = None
+
+        # Bestimmen des bestmöglichen nächsten Schrittes
+
+        # nach Rechts
+        if index_x+1 < width_height:
+            # check if best_next_index not in path_list
+            if (index_x+1, index_y) not in path_list:
+                best_next_index = (index_x+1, index_y)
+                best_next_value = matrix[index_y][index_x+1]
+        # nach Unten
+        if index_y+1 < width_height:
+            if matrix[index_y+1][index_x] < best_next_value \
+                and (index_x, index_y+1) not in path_list:
+                best_next_index = (index_x, index_y+1)
+                best_next_value = matrix[index_y+1][index_x]
+        # nach Links
+        if index_x-1 >= 0:
+            if matrix[index_y][index_x-1] < best_next_value \
+                and (index_x-1, index_y) not in path_list:
+                best_next_index = (index_x-1, index_y)
+                best_next_value = matrix[index_y][index_x-1]
+        # nach Oben
+        if index_y-1 >= 0:
+            if matrix[index_y-1][index_x] < best_next_value \
+                and (index_x, index_y-1) not in path_list:
+                best_next_index = (index_x, index_y-1)
+                best_next_value = matrix[index_y-1][index_x]
+        # Wenn kein Schritt mehr möglich ist
+        if not best_next_index:
+            #print("Sackgasse!")
+            break
+
+        # Besten nächsten Schritt zum Weg hinzufügen
+        path_list.append(best_next_index)
+        index = best_next_index
+
+        cost += best_next_value
+
+    return path_list, cost
+
+
+def recursive_optimal_path(
+        matrix,
+        current_position=(0, 0),
+        current_cost=0,
+        current_path=[]
+        ):
+    '''Rekursiver Ansatz für den Weg durch die Matrix
+
+    Args:
+        matrix (list(list())): Matrix
+        current_position (tuple(int, int)): Aktuelle Position
+        current_cost (int): Aktuelle Kosten
+        current_path (list((int, int))): Aktueller Weg'''
+    rows = len(matrix)
+    end = (rows - 1, rows - 1)
+
+    # Base case: reached the bottom right corner
+    if current_position == end:
+        return current_path + [end], current_cost
+
+    row, col = current_position
+    neighbors = []
+
+    # Bestimmen des bestmöglichen nächsten Schrittes
+    if row > 0:
+        neighbors.append(((row - 1, col), matrix[row - 1][col]))
+    if row < rows - 1:
+        neighbors.append(((row + 1, col), matrix[row + 1][col]))
+    if col > 0:
+        neighbors.append(((row, col - 1), matrix[row][col - 1]))
+    if col < rows - 1:
+        neighbors.append(((row, col + 1), matrix[row][col + 1]))
+
+    best_path = None
+    best_cost = 99
+
+    # Alle Nachbarn durchgehen
+    for next_position, cost in neighbors:
+        # Wenn der Nachbar nicht im Pfad ist, dann wird der Pfad rekursiv fortgesetzt
+        # sonst bedeutet es, dass dieses Feld bereits besucht wurde
+        if next_position not in current_path:
+            new_path, new_cost = recursive_optimal_path(matrix, next_position,
+                                                        current_cost + cost,
+                                                        current_path + [current_position])
+
+            # Wenn der neue Pfad besser ist, wird der alte überschrieben
+            if new_cost < best_cost:
+                best_path = new_path
+                best_cost = new_cost
+
+    return best_path, best_cost
+
+
+
+
+if __name__ == "__main__":
+    print("Greedy Ansatz")
+    print("-------------")
+    print("Je höher die Dimension der Matrix, desto länger dauert die Berechnung.")
+    dimension = input("Geben Sie die Dimension der Matrix ein (positive Zahl): ")
+
+    try:
+        dimension = int(dimension)
+    except ValueError:
+        print("Bitte geben Sie eine positive Zahl ein.")
+        exit()
+
+    gened_matrix = gen_matrix(dimension)
+
+    print("Matrix:")
+    for i in gened_matrix:
+        print(i)
+
+
+    optimal_path, optimal_cost= greedy_approach(gened_matrix)
+
+    print("Weg:", optimal_path)
+    print("Kosten:", optimal_cost)
+
+    print("\nOptimierter Ansatz")
+    print("------------------")
+
+    optimal_path, optimal_cost = recursive_optimal_path(gened_matrix)
+
+    print("Weg:", optimal_path)
+    print("Kosten:", optimal_cost)

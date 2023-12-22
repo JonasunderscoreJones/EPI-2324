@@ -1,5 +1,5 @@
 '''EPR Übung 7'''
-__author__ = "7987847, Werner, 8004356, Gill"
+__author__ = "7987847, Werner"
 
 import random
 
@@ -66,7 +66,7 @@ def greedy_approach(matrix) -> list((int, int)):
                 best_next_value = matrix[index_y-1][index_x]
         # Wenn kein Schritt mehr möglich ist
         if not best_next_index:
-            #print("Sackgasse!")
+            print("Sackgasse!")
             break
 
         # Besten nächsten Schritt zum Weg hinzufügen
@@ -141,19 +141,10 @@ if __name__ == "__main__":
 
     try:
         dimension = int(dimension)
-
-        # Check if the dimension is positive
-        if dimension <= 0:
-            raise ValueError("Dimension must be a positive number.")
-
-    except (ValueError, TypeError) as e:
+    except ValueError:
         print("Bitte geben Sie eine positive Zahl ein.")
         exit()
 
-    #Test 1 - Positive Number [3] as input --> generates Matrix successfully
-    #Test 2 - Negative Number [-1] as input --> Value Error
-    #Test 3 - String (Hello) as input --> Value Error 
-    
     gened_matrix = gen_matrix(dimension)
 
     print("Matrix:")
@@ -162,8 +153,7 @@ if __name__ == "__main__":
 
 
     optimal_path, optimal_cost= greedy_approach(gened_matrix)
-    print("\nGreedy Ansatz")
-    print("------------------")
+
     print("Weg:", optimal_path)
     print("Kosten:", optimal_cost)
 

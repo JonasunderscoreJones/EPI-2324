@@ -1,5 +1,5 @@
 '''EPRE Übung 7 Aufgabe 3'''
-__author__ = "7987847, Werner, 8004356, Gill"
+__author__ = "7987847, Werner"
 
 import concurrent.futures
 import timeit
@@ -74,7 +74,7 @@ def plot_results(sizes, greedy_runtimes, recursive_runtimes):
     plt.show()
 
 if __name__ == "__main__":
-    matrix_sizes = list(range(1, 6))
+    matrix_sizes = list(range(1, 7))
 
     greedy_runtimes, recursive_runtimes = compare_runtimes_parallel(matrix_sizes)
 
@@ -86,7 +86,10 @@ if __name__ == "__main__":
     for size, runtime in zip(matrix_sizes, recursive_runtimes):
         print(f"Size: {size}, Runtime: {runtime:.6f} seconds")
 
-   
+    print("Recursive runtimes:")
+    for size, runtime in zip(matrix_sizes, recursive_runtimes):
+        print(f"Size: {size}, Runtime: {runtime:.6f} seconds")
+        print(f"Size: {size}, Runtime: {runtime:.6f} seconds")
 
     try:
         import matplotlib.pyplot as plt
@@ -95,6 +98,3 @@ if __name__ == "__main__":
 
     except ImportError:
         print("matplotlib not installed. Skipping plotting of results.")
-
-
-# Tests are in Documentation
